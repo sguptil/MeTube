@@ -2,8 +2,8 @@
 include "mysqlClass.inc.php";
 
 
-function user_exist_check ($username, $password){
-	$query = "select * from ACCOUNT where username='$username'";
+function user_exist_check ($AccountID, $username, $lastname, $password1, $gender, $dateofbirth,$email){
+	$query = "select * from account where username='$username'";
 	$result = mysql_query( $query );
 	if (!$result){
 		die ("user_exist_check() failed. Could not query the database: <br />". mysql_error());
@@ -11,7 +11,7 @@ function user_exist_check ($username, $password){
 	else {
 		$row = mysql_fetch_assoc($result);
 		if($row == 0){
-			$query = "insert into ACCOUNT values ('$username','$password')";
+			$query = "insert into account values (NULL, '$username', '$lastname','$password1','$gender', '$dateofbirth','$email')";
 			echo "insert query:" . $query;
 			$insert = mysql_query( $query );
 			if($insert)
@@ -29,8 +29,7 @@ function user_exist_check ($username, $password){
 function user_pass_check($username, $password)
 {
 	
-	$query = "select * from ACCOUNT where username='$username'";
-	echo  $query;
+	$query = "select * from account where username='$username'";
 	$result = mysql_query( $query );
 		
 	if (!$result)
@@ -40,9 +39,9 @@ function user_pass_check($username, $password)
 	else{
 		$row = mysql_fetch_row($result);
 		if(strcmp($row[1],$password))
-			return 2; //wrong password
+			return 0; //wrong password
 		else 
-			return 0; //Checked.
+			return 2; //Checked.
 	}	
 }
 
@@ -80,9 +79,4 @@ function upload_error($result)
 	}
 }
 
-function other()
-{
-	//You can write your own functions here.
-}
-	
 ?>
