@@ -55,7 +55,7 @@ if(isset($_POST['submit'])) {
 		<tr>
 		<td><br><input name="submit" type="submit" value="Login"></td>&nbsp;&nbsp;&nbsp;&nbsp;
 		<td><input name="reset" type="reset" value="Reset"><br></td><br>
-		</tr>
+		</tr></form>
 	<form action="register.php" method="post"> 
 			<table>
 			<tr>
