@@ -38,11 +38,18 @@ function user_pass_check($username, $password)
 	}
 	else{
 		$row = mysql_fetch_row($result);
-		if(strcmp($row[1],$password))
-			return 0; //wrong password
+		if(strcmp($row[0],$username))
+			return 1; //wrong username
 		else 
-			return 2; //Checked.
-	}	
+			return 0; //Checked.
+		
+		$row = mysql_fetch_row($result);
+		if(strcmp($row[1],$password))
+			return 2; //wrong password
+		else 
+			return 0; //Checked.
+		
+}
 }
 
 function updateMediaTime($mediaid)
