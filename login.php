@@ -12,10 +12,10 @@ if(isset($_POST['submit'])) {
 		else {
 			$check = user_pass_check($_POST['username'],$_POST['password']); // Call functions from function.php
 			if($check == 1) {
-				$login_error = "User ".$_POST['username']." not found.";
+				$login_error = "<h2>User ".$_POST['username']." not found.</h2>";
 			}
 			elseif($check==2) {
-				$login_error = "!!Incorrect password!!";
+				$login_error = "<h2>!!Incorrect password!!</h2>";
 			}
 			else if($check==0){
 				$_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
