@@ -1,30 +1,35 @@
-<link rel="stylesheet" type="text/css" href="css/default.css" />
-
 <?php
 session_start();
-
 include_once "function.php";
-
 if(isset($_POST['submit'])) {
-		if($_POST['username'] == "" || $_POST['password'] == "") {
-			$login_error = "<h3>!!One or more fields are missing!!</h3>";
+	$username = $_POST['username'];
+	if($username == "" || $_POST['password'] == "") {
+		$login_error = "<h3>!!One or more fields are missing!!</h3>";
+	}
+	else {
+		$check = user_pass_check($username,$_POST['password']); // Call functions from function.php
+		if($check == 1) {
+			$login_error = "User ".$username." not found";
 		}
-		else {
-			$check = user_pass_check($_POST['username'],$_POST['password']); // Call functions from function.php
-			if($check == 1) {
-				$login_error = "<h2>User ".$_POST['username']." not found.</h2>";
-			}
-			elseif($check==2) {
-				$login_error = "<h2>!!Incorrect password!!</h2>";
-			}
-			else if($check==0){
-				$_SESSION['username']=$_POST['username']; //Set the $_SESSION['username']
-				header('Location: browse.php');
-			}		
+		elseif($check == 2) {
+			$login_error = "Incorrect password: ". mysql_error();
 		}
+		else if($check == 0) {
+			$acc_result = mysql_query("SELECT AccountID,username from account where username='$username'");
+			$account = mysql_fetch_assoc($acc_result);
+			
+			$_SESSION['AccountID'] = $account['AccountID'];
+			$_SESSION['username'] = $account['username'];
+			$redirect_url = (isset($_SESSION['redirect_url'])) ? $_SESSION['redirect_url'] : 'index.php';
+			unset($_SESSION['redirect_url']);
+			header("Location: $redirect_url", true, 303);
+			exit;
+		}	
+	}
 }
-
 ?>
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+
 <html>	
 	<head>
 	<style>
@@ -69,5 +74,5 @@ if(isset($_POST['submit'])) {
 	</html>
 	<?php
 	   if(isset($login_error))
-	  { echo "<id='passwd_result'>".$login_error."";}
+	  { echo "<h2 id='passwd_result'>". $login_error ."</h2>";}
    ?>

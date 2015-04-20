@@ -1,83 +1,93 @@
 <?php
+
 include "mysqlClass.inc.php";
 
-
-function user_exist_check ($AccountID, $username, $lastname, $password1, $gender, $dateofbirth,$email){
-	$query = "select * from account where username='$username'";
-	$result = mysql_query( $query );
-	if (!$result){
-		die ("user_exist_check() failed. Could not query the database: <br />". mysql_error());
-	}	
+// 1: user inserted into DB
+// 2: user exists in DB
+function user_exist_check ($username, $password) {
+	$query = "SELECT * from account where username='$username'";
+	$result = mysql_query($query);
+	if (!$result) {
+		die("user_exist_check() error: Failed to query the database: <br />". mysql_error());
+	}
 	else {
 		$row = mysql_fetch_assoc($result);
-		if($row == 0){
-			$query = "insert into account values (NULL, '$username', '$lastname','$password1','$gender', '$dateofbirth','$email')";
-			echo "insert query:" . $query;
-			$insert = mysql_query( $query );
-			if($insert)
+		if ($row == 0) {
+			$query = "INSERT into account values ('NULL','$username', '$password')";
+			$insert = mysql_query($query);
+			if ($insert)
 				return 1;
 			else
-				die ("Could not insert into the database: <br />". mysql_error());		
+				die("Failed to insert into the database: <br>" . mysql_error());
 		}
-		else{
+		else {
 			return 2;
 		}
 	}
 }
 
+function user_pass_check ($username, $password) {
+	$query = "SELECT * from account where username='$username'";
+	$result = mysql_query($query);
 
-function user_pass_check($username, $password)
-{
-	
-	$query = "select * from account where username='$username'";
-	$result = mysql_query( $query );
-		
-	if (!$result)
-	{
-	   die ("user_pass_check() failed. Could not query the database: <br />". mysql_error());
+	if (!$result) {
+		die("user_pass_check() error: Failed to query the database: <br />" . mysql_error());
 	}
-	else{
+	else {
 		$row = mysql_fetch_row($result);
-		if(strcmp($row[3],$password))
-			return 2; //wrong password
-		else 
-			return 0; //Checked.
-		
-}
-}
-
-function updateMediaTime($mediaid)
-{
-	$query = "	update  media set lastaccesstime=NOW()
-   						WHERE '$mediaid' = mediaid
-					";
-					 // Run the query created above on the database through the connection
-    $result = mysql_query( $query );
-	if (!$result)
-	{
-	   die ("updateMediaTime() failed. Could not query the database: <br />". mysql_error());
+		if (strcmp($row[2], $password))
+			return 2; // wrong password
+		else
+			return 0; // successful
 	}
 }
 
-function upload_error($result)
-{
-	//view erorr description in http://us2.php.net/manual/en/features.file-upload.errors.php
-	switch ($result){
-	case 1:
-		return "UPLOAD_ERR_INI_SIZE";
-	case 2:
-		return "UPLOAD_ERR_FORM_SIZE";
-	case 3:
-		return "UPLOAD_ERR_PARTIAL";
-	case 4:
-		return "UPLOAD_ERR_NO_FILE";
-	case 5:
-		return "File has already been uploaded";
-	case 6:
-		return  "Failed to move file from temporary directory";
-	case 7:
-		return  "Upload file failed";
+function upload_error ($result) {
+	// Error descriptions found here: http://us2.php.net/manual/en/features.file-upload.errors.php
+	switch ($result) {
+		case 0:
+			return "UPLOAD_ERR_OK";
+		case 1:
+            return "UPLOAD_ERR_INI_SIZE";
+        case 2:
+            return "UPLOAD_ERR_FORM_SIZE";
+        case 3:
+            return "UPLOAD_ERR_PARTIAL";
+        case 4:
+            return "UPLOAD_ERR_NO_FILE";
+        case 5:
+            return "UPLOAD_ERR_NO_TMP_DIR";
+        case 6:
+            return  "UPLOAD_ERR_CANT_WRITE";
+        case 7:
+            return  "UPLOAD_ERR_EXTENSION";
 	}
+}
+
+function get_client_ip() {
+	// Check from shared internet
+	if (!empty($_SERVER['HTTP_CLIENT_IP']))
+		$ipaddress = $$_SERVER['HTTP_CLIENT_IP'];
+	// Check from proxy
+	else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+    	$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	else
+    	$ipaddress = $_SERVER['REMOTE_ADDR'];
+    return $ipaddress;
+}
+
+function updateMediaTime ($MediaID)
+{
+	$query = "UPDATE media set lastaccesstime=CURRENT_TIMESTAMP WHERE MediaID='$MediaID'";
+	$result = mysql_query($query);
+	if (!$result) {
+		die("updateMediaTime() error: Failed to query the database: <br>" . mysql_error());
+	}
+}
+
+// Add row to subscription table
+function create_sub($subscriber, $subscribed) {
+
 }
 
 ?>

@@ -1,6 +1,11 @@
+<?php
+	session_start();
+	include_once "function.php";
+?>
+
 <html>
 <head>
-<title>Profile Update</title>
+<title>Profile - MeTube</title>
 <style>
 	table 
 	{
@@ -23,8 +28,6 @@
 <body bgcolor=#f3f3f3>
 
 <?php
-session_start();
-include_once "function.php";
 if(isset($_POST['submit'])) {
 	
 	if($_POST['password1'] == "") {
@@ -46,8 +49,7 @@ if(isset($_POST['submit'])) {
 		}
 		
 		if(!isset($password)){
-				mysql_query("UPDATE account SET password='".$_POST['password1']."' WHERE username ='".$_SESSION['username']."'")or die(mysql_error());
-			
+			mysql_query("UPDATE account SET password='".$_POST['password1']."' WHERE username ='".$_SESSION['username']."'")or die(mysql_error());
 		}
 		if(!isset($gender)){
 		mysql_query("UPDATE account SET gender='".$_POST['gender']."' WHERE username = '".$_SESSION['username']."'")or die(mysql_error());
@@ -63,14 +65,14 @@ if(isset($_POST['submit'])) {
 		}
 			//echo "Update succeeds";
 			$_SESSION['username'] = $_POST['username'];
-		header('Location: browse.php');
+		header('Location: index.php');
 		}
 		
 		}			
 	
 ?>
 
- <form action="update.php" method="post">
+ <form action="profile.php" method="post">
  
 	<table width="20%">
 		<tr>
