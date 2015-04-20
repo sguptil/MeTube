@@ -18,13 +18,16 @@
 		background-image: url("http://i164.photobucket.com/albums/u8/hemi1hemi/COLOR/imagine.jpg");
 		background-color: #cccccc;
 	}
+
 	</style>
 	</head>
 <body bgcolor=#f3f3f3>
 
 <?php
 session_start();
+
 include_once "function.php";
+
 if(isset($_POST['submit'])) {
 	
 	if($_POST['password1'] == "") {
@@ -115,4 +118,4 @@ if(isset($_POST['submit'])) {
 ?>
 
 </body>
-</html>
+</html>	
