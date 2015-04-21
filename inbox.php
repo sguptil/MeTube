@@ -8,7 +8,7 @@
 session_start();
 include_once "function.php";
     $username = $_SESSION['username'];
-    $query = "select * from account where name='$username'";
+    $query = "select * from account where username='$username'";
     $result = mysql_query( $query );
     $row = mysql_fetch_row($result);
     $userid = $row[0];
@@ -54,21 +54,21 @@ if($_SESSION['username'])
             $messageid=$row['message_id'];
             $content=$row['contents'];
             $sender=$row['sender_accountid'];
-            $y="SELECT * FROM account WHERE userid = '".$sender."'";
+            $y="SELECT * FROM account WHERE accountid = '".$sender."'";
             $r = mysql_query($y) or die(mysql_error());
             $w = mysql_fetch_row($r);
             $sender1 = $w[1];
             $subject=$row['subject'];
             $time=$row['timestamp'];
-            $recv_del=$row['recv_flag'];
-            $unread=$row['unread'];
+           // $recv_del=$row['recv_flag'];
+           // $unread=$row['unread'];
     
-            if(!$recv_del) //if the msg is in inbox
-            {
+           // if(!$recv_del) //if the msg is in inbox
+            //{
                 echo "<tr><td align='center'><a href='message.php?id=".$messageid."'>";
                 echo "<b>".$subject."</b>";
                 echo "</a></td><td align='center' class='style3'>".$time."</td><td class='style3' align='center'>".$sender1."</td></tr>";
-            }
+            //}
         }
     }
 }

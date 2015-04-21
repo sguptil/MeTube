@@ -11,7 +11,7 @@ else{
 session_start();
 include_once "function.php";
     $username = $_SESSION['username'];
-    $query = "select * from account where name='$username'";
+    $query = "select * from account where username='$username'";
     $result = mysql_query( $query );
     $row = mysql_fetch_row($result);
     $userid = $row[0];
@@ -66,26 +66,22 @@ while($row=mysql_fetch_array($result))
     $sender=$row['sender_accountid'];
     $subject=$row['subject'];
     $time=$row['timestamp'];
-    $recv_del=$row['recv_flag'];
-    $snd_flag=$row['sender_flag'];
-    $qy = "select * from account where userid='".$sender."'";
+   // $recv_del=$row['recv_flag'];
+    //$snd_flag=$row['sender_flag'];
+    $qy = "select * from account where accountid='".$sender."'";
     $t = mysql_query( $qy ) or die(mysql_error());
     $r2 = mysql_fetch_row($t);
     $sendname = $r2[1];
     
     
-    $e = "select * from account where userid='$recvr'";
+    $e = "select * from account where accountid='$recvr'";
     $a = mysql_query( $e ) or die(mysql_error());
     $r3 = mysql_fetch_row($a);
     $recvname = $r3[1];
-    if(!$snd_flag)
-    {
+    
      echo "<tr><td align='center'><a href='message.php?id=".$message_id."'>";
      echo $subject; 
      echo "</a></td><td  class='style3'>".$time."</td><td class='style3'>".$sendname."</td><td class='style3'>".$recvname."</td></tr>";
-    
-    }else 
-    {}
     
     }
 }
@@ -98,7 +94,9 @@ while($row=mysql_fetch_array($result))
     </div> <!-- end #content -->
 
 
-<?php include('footer.php'); ?>             
+<?php 
+//include('footer.php'); 
+?>             
 
 </div> <!-- End #wrapper -->
     

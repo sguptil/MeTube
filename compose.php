@@ -108,7 +108,9 @@ else if(isset($_POST['reset'])){}
 </div> <!-- end #content -->
 
 
-<?php// include('sidebar.php'); ?>
+<?php
+// include('sidebar.php'); 
+?>
 
 
 </div> <!-- End #wrapper -->
